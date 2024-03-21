@@ -15,7 +15,7 @@ terraform {
     }
   }
 
-  # Configure the backend to store Terraform state in my S3 bucket
+  # Configuring the backend to store Terraform state in my S3 bucket
   backend "s3" {
     bucket = "s3-backend-tfstate-tanishka"
     key    = "Terraform-eks/terraform.tfstate"
@@ -33,7 +33,7 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
-# Configure the Kubernetes provider
+# Configuring the Kubernetes provider
 provider "kubernetes" {
   cluster_ca_certificate = base64decode(module.eks.kubeconfig-certificate-authority-data)
   host                   = data.aws_eks_cluster.cluster.endpoint
