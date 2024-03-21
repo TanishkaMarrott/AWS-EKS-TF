@@ -24,8 +24,4 @@ module "eks" {
   scaling_min_size        = 1
   instance_types          = ["t3.small"]
   key_pair                = "tanishka-tokyo-ssh-key"
-  tags = {
-    "Environment" = "production"
-    "Project"     = "EKS Cluster"
-  }
 }
