@@ -28,6 +28,4 @@ module "eks" {
     "Environment" = "production"
     "Project"     = "EKS Cluster"
   }
-  # Enabled Logging
-  cluster_logging_types   = ["api", "audit", "authenticator"]
 }
