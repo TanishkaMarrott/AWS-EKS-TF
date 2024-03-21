@@ -51,7 +51,7 @@ resource "aws_default_route_table" "internal_aws-eks-cluster_default" {
   }
 }
 
-# Associating the created public subnets with the default route table for internet connectivity
+# Associating these public subnets with the default route table for internet connectivity
 resource "aws_route_table_association" "default" {
   count          = var.public_sn_count
   subnet_id      = aws_subnet.public_aws-eks-cluster_subnet[count.index].id
