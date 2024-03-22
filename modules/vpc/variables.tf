@@ -14,7 +14,10 @@ variable "public_cidrs" {
 
 variable "instance_tenancy" {}
 
-variable "tags" {}
+variable "tags" {
+
+}
+
 
 # Whether instances launched in public subnets should automatically be assigned a public IP address.
 variable "map_public_ip_on_launch" {}

@@ -2,9 +2,8 @@
 resource "aws_vpc" "aws-eks-cluster" {
   cidr_block       = var.vpc_cidr 
   instance_tenancy = var.instance_tenancy
-  tags = {
-    Name = var.tags
-  }
+  tags = var.tags
+
 }
 
 # Creating an Internet Gateway for the VPC
