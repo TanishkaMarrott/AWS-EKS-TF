@@ -10,9 +10,7 @@ resource "aws_vpc" "aws-eks-cluster" {
 resource "aws_internet_gateway" "aws-eks-cluster_gw" {
   vpc_id = aws_vpc.aws-eks-cluster.id
 
-  tags = {
-    Name = var.tags
-  }
+  tags = var.tags
 }
 
 # List of available Availability Zones for deploying the subnet in ap-northeast-1
@@ -32,9 +30,7 @@ resource "aws_subnet" "public_aws-eks-cluster_subnet" {
   cidr_block              = var.public_cidrs[count.index]
   availability_zone       = random_shuffle.az_list.result[count.index]
   map_public_ip_on_launch = var.map_public_ip_on_launch
-  tags = {
-    Name = var.tags
-  }
+  tags = var.tags
 }
 
 # Associating the default route table with a route to IG for outbound internet access
@@ -45,9 +41,7 @@ resource "aws_default_route_table" "internal_aws-eks-cluster_default" {
     cidr_block = var.rt_route_cidr_block
     gateway_id = aws_internet_gateway.aws-eks-cluster_gw.id
   }
-  tags = {
-    Name = var.tags
-  }
+  tags = var.tags
 }
 
 # Associating these public subnets with the default route table for internet connectivity
