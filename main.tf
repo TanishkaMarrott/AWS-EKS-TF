@@ -17,7 +17,7 @@ module "eks" {
   cluster_name            = "module-eks-${random_string.suffix.result}"
   endpoint_public_access  = true
   endpoint_private_access = false
-  public_access_cidrs     = ["52.69.121.167/32", "115.96.77.190/32"]  # Restricting Kubernetes API server access - my Ip and Jenkins Severs IP
+  public_access_cidrs     = ["52.69.121.167/32", "115.96.77.190/32"]  # Restricting Kubernetes API server access - my Ip and Jenkins Server's IP
   node_group_name         = "aws-eks-cluster"
   scaling_desired_size    = 2
   scaling_max_size        = 4
