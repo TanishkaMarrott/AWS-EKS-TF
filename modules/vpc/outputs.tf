@@ -9,3 +9,7 @@ output "aws_public_subnet" {
 output "vpc_id" {
   value = aws_vpc.aws-eks-cluster.id
 }
+
+output "aws_private_subnet" {
+  value = aws_subnet.private_aws-eks-cluster_subnet.*.id
+}
