@@ -1,4 +1,4 @@
 
 # Terraform AWS EKS Cluster
-This repository contains Terraform configurations for creating a highly available and scalable Amazon EKS cluster.          
-It leverages AWS best practices for security and efficiency --> we've ensured that our workloads are managed effectively. The Terraform state is stored remotely in an S3 bucket to facilitate team collaboration and to secure the state file.
+
+This GitHub repository hosts Terraform configurations designed to provision a fully-managed Elastic Kubernetes Service cluster along with the necessary VPC infrastructure. The setup is optimized for scalability, security and cost-efficiency, making it suitable for a wide range of applications from development and testing environments to production deployments.
