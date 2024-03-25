@@ -12,7 +12,12 @@ variable "endpoint_private_access" {}
 
 variable "endpoint_public_access" {}
 
-variable "public_access_cidrs" {}
+variable "public_access_cidrs" {
+  description = "CIDR blocks for public access to the EKS cluster API"
+  type        = list(string)
+  default     = ["3.112.23.0/29"]
+}
+
 
 variable "node_group_name" {}
 
