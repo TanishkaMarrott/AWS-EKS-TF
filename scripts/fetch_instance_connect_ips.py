@@ -18,7 +18,7 @@ def main():
         ips = ','.join(item['ip_prefix'] for item in data['prefixes'] if item['service'] == service and item['region'] == region)
         # Ensure output is a single string
         if ips:
-            output = {"ips": ips}
+            output = ips
         else:
             output = {"ips": ""}
         print(json.dumps(output))
