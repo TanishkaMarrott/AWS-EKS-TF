@@ -22,7 +22,7 @@ def main():
         ips = [item['ip_prefix'] for item in data['prefixes'] if item['service'] == service and item['region'] == region]
 
         # Output the list of IPs as JSON
-        output = {"ips": ips}
+        output = [{"ips": ips}]
         print(json.dumps(output))
 
     except Exception as e:
