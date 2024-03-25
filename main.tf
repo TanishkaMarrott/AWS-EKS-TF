@@ -33,5 +33,6 @@ module "eks" {
 }
 
 data "external" "instance_connect_ips" {
-  program = ["python", "${path.module}/scripts/fetch_instance_connect_ips.py", "ap-northeast-1"]
+  program = ["python", "${path.module}/../scripts/fetch_instance_connect_ips.py", "ap-northeast-1"]
+
 }
