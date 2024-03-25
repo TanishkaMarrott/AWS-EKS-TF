@@ -95,6 +95,22 @@ resource "aws_iam_role_policy_attachment" "aws-eks-cluster-AmazonEKSVPCResourceC
   role       = aws_iam_role.aws-eks-cluster.name
 }
 
+
+resource "aws_iam_role" "aws-eks-cluster2" {
+  name = "eks-node-group-aws-eks-cluster"
+
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+    Version = "2012-10-17"
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "aws-eks-cluster-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.aws-eks-cluster2.name
