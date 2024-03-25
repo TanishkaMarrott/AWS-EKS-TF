@@ -16,7 +16,7 @@ module "vpc" {
 
 module "eks" {
   source                  = "./modules/eks"
-  # Use the private subnet IDs for the node group. Ensure that this variable receives the correct values from your VPC module.
+  # Use the private subnet IDs for the node group. 
   aws_private_subnet      = module.vpc.aws_private_subnet
   aws_public_subnet       = module.vpc.aws_public_subnet
   vpc_id                  = module.vpc.vpc_id
@@ -25,7 +25,7 @@ module "eks" {
   endpoint_private_access = true  # Typically, you'd want private access enabled if your node groups are in private subnets.
   public_access_cidrs     = data.external.instance_connect_ips.result["ips"]
   node_group_name         = "aws-eks-cluster"
-  scaling_desired_size    = 1
+  scaling_desired_size    = 2
   scaling_max_size        = 2
   scaling_min_size        = 1
   instance_types          = ["t3.small"]
