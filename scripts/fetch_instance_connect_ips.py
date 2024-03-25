@@ -22,11 +22,8 @@ try:
     # Filter IP ranges by service and region
     ips = [prefix['ip_prefix'] for prefix in ip_ranges['prefixes'] if prefix['service'] == service and prefix['region'] == region]
 
-    # Join the IP addresses into a single string separated by commas
-    ip_string = ','.join(ips)
-
-    # Output the result as JSON with IPs as a single string
-    print(json.dumps({"ips": ip_string}))
+    # Output the result as JSON with IPs as a list
+    print(json.dumps({"ips": ips}))
 
 except Exception as e:
     print(f"Error fetching or parsing AWS IP ranges: {str(e)}")
