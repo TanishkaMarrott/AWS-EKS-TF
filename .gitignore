@@ -14,13 +14,4 @@ terraform.lock.hcl
 # Terraform module directories
 .terraform/
 
-# Logs
-*.log
-
-# Binary, temporary, and other system files
-*.bin
-*.tmp
-*.swp
-*.swo
-.DS_Store
 
