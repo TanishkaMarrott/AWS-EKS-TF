@@ -23,7 +23,7 @@ module "eks" {
   cluster_name            = "module-eks-${random_string.suffix.result}"
   endpoint_public_access  = true
   endpoint_private_access = true  # Typically, you'd want private access enabled if your node groups are in private subnets.
-  public_access_cidrs     = data.external.instance_connect_ips.result["ips"]
+  public_access_cidrs     = ["0.0.0.0/0"]
   node_group_name         = "aws-eks-cluster"
   scaling_desired_size    = 2
   scaling_max_size        = 2
@@ -32,7 +32,8 @@ module "eks" {
   key_pair                = "tanishka-tokyo-ssh-key"
 }
 
-data "external" "instance_connect_ips" {
-  program = ["python3", "${path.module}/scripts/fetch_instance_connect_ips.py", "ap-northeast-1"]
 
-}
+###data "external" "instance_connect_ips" {
+ ### program = ["python3", "${path.module}/scripts/fetch_instance_connect_ips.py", "ap-northeast-1"]
+
+###}

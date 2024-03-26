@@ -13,7 +13,7 @@ variable "endpoint_private_access" {}
 variable "endpoint_public_access" {}
 
 variable "public_access_cidrs" {
-  description = "CIDR blocks for public access to the EKS clsuster API"
+  description = "CIDR blocks for public access to the EKS cluster API"
 }
 
 
