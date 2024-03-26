@@ -1,0 +1,26 @@
+# Terraform lock file
+terraform.lock.hcl
+
+# Terraform plan files
+*.tfplan
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Terraform backup files
+*.tfstate.backup
+
+# Terraform module directories
+.terraform/
+
+# Logs
+*.log
+
+# Binary, temporary, and other system files
+*.bin
+*.tmp
+*.swp
+*.swo
+.DS_Store
+
