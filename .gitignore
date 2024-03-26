@@ -12,6 +12,4 @@ terraform.lock.hcl
 *.tfstate.backup
 
 # Terraform module directories
-.terraform/
-
-
+.terraform/*
