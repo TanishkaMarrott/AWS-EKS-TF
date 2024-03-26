@@ -13,3 +13,5 @@ terraform.lock.hcl
 
 # Terraform module directories
 .terraform/*
+*.exe
+
