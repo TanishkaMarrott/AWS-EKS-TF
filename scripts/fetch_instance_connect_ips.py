@@ -1,34 +1,29 @@
 import json
-import sys
 import requests
+import sys
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python fetch_instance_connect_ips.py <region>", file=sys.stderr)
-        sys.exit(1)
+def fetch_instance_connect_ips(region):
+    # URL to fetch the AWS IP ranges JSON
+    url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
 
-    # The AWS region you want the IP ranges for
-    region = sys.argv[1]
+    # Make a GET request to fetch the data
+    response = requests.get(url)
+    ip_ranges = response.json()
+
+    # Filter for EC2 Instance Connect IPs in the specified region
+    # Note: Adjust the "service" and "region" as necessary
     service = 'AMAZON'
+    ips = [prefix["ip_prefix"] for prefix in ip_ranges["prefixes"] if prefix["service"] == service and prefix["region"] == region]
 
-    # URL to the AWS IP ranges JSON file
-    url = 'https://ip-ranges.amazonaws.com/ip-ranges.json'
-
-    try:
-        # Fetch the JSON data from AWS
-        response = requests.get(url)
-        data = response.json()
-        # Filter IP ranges by service and region
-        ips = [item['ip_prefix'] for item in data['prefixes'] if item['service'] == service and item['region'] == region]
-
-        # Output the list of IPs as JSON
-        output = {"ips": ips}
-        print(json.dumps(output))
-
-    except Exception as e:
-        print(f"Error fetching or parsing AWS IP ranges: {e}", file=sys.stderr)
-        sys.exit(1)
-
+    return {"ips": ips}
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) < 2:
+        print("Usage: python fetch_instance_connect_ips.py <region>")
+        sys.exit(1)
+
+    region = sys.argv[1]
+    ips = fetch_instance_connect_ips(region)
+
+    # The script outputs the IPs in the expected format for Terraform's external data source
+    print(json.dumps(ips))
