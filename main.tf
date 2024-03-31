@@ -26,7 +26,7 @@ module "eks" {
   cluster_name            = "module-eks-${random_string.suffix.result}"
   endpoint_public_access  = true
   endpoint_private_access = true
-  public_access_cidrs     = split(",", jsondecode(data.external.instance_connect_ips.result)["ips"])
+  public_access_cidrs     = split(",", data.external.instance_connect_ips.result["ips"])
   node_group_name         = "aws-eks-cluster"
   scaling_desired_size    = 2
   scaling_max_size        = 2
@@ -34,3 +34,4 @@ module "eks" {
   instance_types          = ["t3.small"]
   key_pair                = "tanishka-tokyo-ssh-key"
 }
+
