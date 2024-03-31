@@ -44,7 +44,6 @@ resource "aws_subnet" "private_aws-eks-cluster_subnet" {
 # Allocate Elastic IPs for the NAT Gateways
 resource "aws_eip" "nat" {
   count = length(var.public_cidrs)
-  vpc   = true
   tags  = var.tags
 }
 
