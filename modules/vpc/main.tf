@@ -1,4 +1,4 @@
-# Defining the VPC for the AWS EKS cluster
+# Define the VPC for the EKS cluster
 resource "aws_vpc" "aws-eks-cluster" {
   cidr_block           = var.vpc_cidr
   instance_tenancy     = var.instance_tenancy
@@ -7,22 +7,22 @@ resource "aws_vpc" "aws-eks-cluster" {
   tags                 = var.tags
 }
 
-# Creating an Internet Gateway for the VPC
+# Create an Internet Gateway for the VPC to allow communication with the internet
 resource "aws_internet_gateway" "aws-eks-cluster_gw" {
   vpc_id = aws_vpc.aws-eks-cluster.id
   tags   = var.tags
 }
 
-# List of available Availability Zones for deploying the subnet
+# Data source to fetch the list of available Availability Zones
 data "aws_availability_zones" "available" {}
 
-# Randomly shuffling the list of available Availability Zones
+# Randomize the selection of Availability Zones to use for the subnets
 resource "random_shuffle" "az_list" {
   input        = data.aws_availability_zones.available.names
   result_count = 2
 }
 
-# Creating public subnets in the VPC
+# Create public subnets for the EKS cluster
 resource "aws_subnet" "public_aws-eks-cluster_subnet" {
   count                   = length(var.public_cidrs)
   vpc_id                  = aws_vpc.aws-eks-cluster.id
@@ -32,46 +32,53 @@ resource "aws_subnet" "public_aws-eks-cluster_subnet" {
   tags                    = var.tags
 }
 
-# Creating private subnets in the VPC
+# Create private subnets for the EKS cluster
 resource "aws_subnet" "private_aws-eks-cluster_subnet" {
-  count                   = length(var.private_cidrs)
-  vpc_id                  = aws_vpc.aws-eks-cluster.id
-  cidr_block              = element(var.private_cidrs, count.index)
-  availability_zone       = element(random_shuffle.az_list.result, count.index)
-  map_public_ip_on_launch = false
-  tags                    = var.tags
+  count             = length(var.private_cidrs)
+  vpc_id            = aws_vpc.aws-eks-cluster.id
+  cidr_block        = element(var.private_cidrs, count.index)
+  availability_zone = element(random_shuffle.az_list.result, count.index)
+  tags              = var.tags
 }
 
-# Creating Elastic IP for NAT Gateway
+# Allocate Elastic IPs for the NAT Gateways
 resource "aws_eip" "nat" {
- 
+  count = length(var.public_cidrs)
+  vpc   = true
+  tags  = var.tags
 }
 
-# Creating a NAT Gateway in the first public subnet
+# Create a NAT Gateway in each public subnet for high availability
 resource "aws_nat_gateway" "nat_gw" {
-  allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public_aws-eks-cluster_subnet[0].id
+  count         = length(var.public_cidrs)
+  allocation_id = aws_eip.nat[count.index].id
+  subnet_id     = element(aws_subnet.public_aws-eks-cluster_subnet.*.id, count.index)
   tags          = var.tags
 }
 
-# Creating a route table for private subnets to route traffic through the NAT Gateway
+# Create route tables for the private subnets
 resource "aws_route_table" "private" {
+  count = length(var.private_cidrs)
   vpc_id = aws_vpc.aws-eks-cluster.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw.id
-  }
-  tags = var.tags
+  tags   = var.tags
 }
 
-# Associating private subnets with the route table
+# Add routes to the private route tables to route internet-bound traffic through the NAT Gateways
+resource "aws_route" "private_nat" {
+  count                  = length(var.private_cidrs)
+  route_table_id         = element(aws_route_table.private.*.id, count.index)
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = element(aws_nat_gateway.nat_gw.*.id, count.index)
+}
+
+# Associate the private subnets with their corresponding route tables
 resource "aws_route_table_association" "private" {
   count          = length(var.private_cidrs)
-  subnet_id      = aws_subnet.private_aws-eks-cluster_subnet[count.index].id
-  route_table_id = aws_route_table.private.id
+  subnet_id      = element(aws_subnet.private_aws-eks-cluster_subnet.*.id, count.index)
+  route_table_id = element(aws_route_table.private.*.id, count.index)
 }
 
-# Associating the default route table with the Internet Gateway for public subnets
+# Configure the default route table for the VPC to route internet-bound traffic through the Internet Gateway
 resource "aws_default_route_table" "internal_aws-eks-cluster_default" {
   default_route_table_id = aws_vpc.aws-eks-cluster.default_route_table_id
   route {
