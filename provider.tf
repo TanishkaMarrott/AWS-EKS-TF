@@ -17,9 +17,11 @@ terraform {
 
   # Configuring the backend to store Terraform state in my S3 bucket
   backend "s3" {
-    bucket = "s3-backend-tfstate-tanishka"
-    key    = "Terraform-eks/terraform.tfstate"
-    region = "ap-northeast-1"
+    bucket         = "s3-backend-tfstate-tanishka"
+    key            = "Terraform-eks/terraform.tfstate"
+    region         = "ap-northeast-1"
+    dynamodb_table = "terraform-state-locking"
+    encrypt        = true
   }
 }
 
