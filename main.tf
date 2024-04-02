@@ -29,9 +29,12 @@ module "eks" {
   public_access_cidrs     = split(",", data.external.instance_connect_ips.result["ips"])
   node_group_name         = "aws-eks-cluster"
   scaling_desired_size    = 2
-  scaling_max_size        = 2
+  scaling_max_size        = 5  # Increased max size for better scalability
   scaling_min_size        = 1
-  instance_types          = ["t3.small"]
+  instance_types          = ["t3.small", "t3.medium", "m4.large"]  # Added multiple instance types for flexibility
   key_pair                = "tanishka-tokyo-ssh-key"
+  
+
 }
+
 
